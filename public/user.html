@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fostberg — профиль пользователя</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rating.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🎧</span>
+                    <span class="logo-text">Fostberg</span>
+                </a>
+<nav class="nav">
+    <a href="index.html" class="nav-btn">Популярные</a>
+    <a href="top.html" class="nav-btn">Топ пользователей</a>
+    <a href="tracks.html" class="nav-btn">Все треки</a>
+    <a href="write-review.html" class="nav-btn write-btn">✍️ Написать</a>
+    <a href="add-track.html" class="nav-btn">➕ Добавить трек</a>
+</nav>
+            </div>
+            <div class="header-right">
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Поиск треков...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="login-btn" id="loginBtn">Войти</button>
+                    <button class="signup-btn" id="signupBtn">Регистрация</button>
+                </div>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <a href="profile.html" class="profile-btn">
+                        <span class="profile-avatar" id="profileAvatar">👤</span>
+                        <span id="profileName">Профиль</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div id="content" class="content">
+                <div class="loading">Загрузка...</div>
+            </div>
+        </main>
+    </div>
+
+    <div id="loginModal" class="modal">...</div>
+    <div id="signupModal" class="modal">...</div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

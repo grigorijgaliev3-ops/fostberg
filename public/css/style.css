@@ -1,0 +1,2381 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* ========== ХЕДЕР - ВПЛОТНУЮ К КРАЯМ ========== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #1f1f1f;
+    margin-bottom: 32px;
+    background: #0a0a0a;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.logo-icon {
+    font-size: 28px;
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e0e0e0;
+    letter-spacing: -0.5px;
+}
+
+.nav {
+    display: flex;
+    gap: 6px;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 8px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 30px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    color: #e0e0e0;
+    background: #1a1a1a;
+}
+
+.nav-btn.active {
+    color: #e0e0e0;
+    background: #1a1a1a;
+}
+
+/* КНОПКА НАПИСАТЬ - ТЁМНО-КРАСНАЯ */
+.write-btn {
+    background: #8b1a1a;
+    color: #e0e0e0;
+}
+
+.write-btn:hover {
+    background: #a02020;
+    color: #ffffff;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ПОИСК - ФИКСИРОВАННАЯ ШИРИНА */
+.search-wrapper {
+    position: relative;
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.search-input {
+    width: 100%;
+    background: #121212;
+    border: 1px solid #2a2a2a;
+    border-radius: 30px;
+    padding: 8px 12px 8px 36px;
+    font-size: 13px;
+    color: #e0e0e0;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #4a4a4a;
+    background: #181818;
+}
+
+.search-input::placeholder {
+    color: #555;
+    font-size: 12px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #555;
+}
+
+/* КНОПКИ АВТОРИЗАЦИИ */
+.auth-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.login-btn, .signup-btn {
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    color: #e0e0e0;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.login-btn:hover, .signup-btn:hover {
+    background: #1a1a1a;
+    border-color: #4a4a4a;
+}
+
+.signup-btn {
+    background: #1a1a1a;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 40px;
+    padding: 5px 16px 5px 8px;
+    text-decoration: none;
+    color: #e0e0e0;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.profile-btn:hover {
+    background: #252525;
+    border-color: #4a4a4a;
+}
+
+.profile-avatar {
+    width: 28px;
+    height: 28px;
+    background: #2a2a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    object-fit: cover;
+}
+
+.logout-btn {
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    border-radius: 40px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background: #1a1a1a;
+    border-color: #4a2a2a;
+}
+
+/* ========== КОНТЕЙНЕР ДЛЯ КОНТЕНТА ========== */
+.container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0 24px;
+    min-height: 100vh;
+}
+
+/* ========== ВЫПАДАЮЩИЙ ПОИСК ========== */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: auto;
+    right: 0;
+    width: 480px;
+    background: #121212;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    margin-top: 8px;
+    z-index: 1000;
+    max-height: 450px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.search-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #1a1a1a;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-dropdown-item:hover {
+    background: #1a1a1a;
+}
+
+.search-dropdown-cover {
+    width: 52px;
+    height: 52px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.search-dropdown-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-dropdown-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-dropdown-artist {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-dropdown-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.search-dropdown-stats .review-count {
+    color: #555;
+}
+
+.search-dropdown-btn {
+    background: #1a1a1a;
+    border: 1px solid #3a3a3a;
+    color: #e0e0e0;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.search-dropdown-btn:hover {
+    background: #252525;
+    border-color: #5a5a5a;
+}
+
+/* ========== СЕТКА КАРТОЧЕК ========== */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.review-card {
+    background: #0f0f0f;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #1a1a1a;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.review-card:hover {
+    transform: translateY(-4px);
+    border-color: #2a2a2a;
+    background: #141414;
+}
+
+.track-cover {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.track-cover-placeholder {
+    font-size: 56px;
+}
+
+.review-content {
+    padding: 16px;
+}
+
+.track-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-artist {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.review-stars {
+    display: flex;
+    gap: 3px;
+    font-size: 12px;
+}
+
+.star-filled {
+    color: #f5b041;
+}
+
+.star-empty {
+    color: #333;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #888;
+}
+
+.author-avatar-small {
+    width: 20px;
+    height: 20px;
+    background: #2a2a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    object-fit: cover;
+}
+
+.review-date {
+    font-size: 10px;
+    color: #555;
+}
+
+.review-text {
+    font-size: 13px;
+    color: #b0b0b0;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.review-footer {
+    display: flex;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #1a1a1a;
+}
+
+.like-btn {
+    background: transparent;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 25px;
+    transition: all 0.2s;
+}
+
+.like-btn:hover {
+    color: #e0e0e0;
+    background: #1a1a1a;
+}
+
+.like-btn.liked {
+    color: #ff6b6b;
+}
+
+/* ========== СТРАНИЦА ТРЕКА ========== */
+.track-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.track-header {
+    display: flex;
+    gap: 40px;
+    background: #0f0f0f;
+    border-radius: 28px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 1px solid #1a1a1a;
+}
+
+.track-cover-large {
+    width: 240px;
+    height: 240px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+    flex-shrink: 0;
+}
+
+.track-info-large {
+    flex: 1;
+}
+
+.track-info-large h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.track-artist-large {
+    font-size: 20px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.track-meta {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    background: #1a1a1a;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    color: #888;
+}
+
+.track-rating-large {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+
+.rating-stars-large {
+    display: flex;
+    gap: 6px;
+    font-size: 24px;
+}
+
+.rating-value {
+    font-size: 22px;
+    font-weight: 600;
+    color: #f5b041;
+}
+
+.rating-count {
+    font-size: 14px;
+    color: #666;
+}
+
+.write-review-track-btn {
+    background: #8b1a1a;
+    border: 1px solid #8b1a1a;
+    color: #e0e0e0;
+    padding: 12px 32px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.write-review-track-btn:hover {
+    background: #a02020;
+    border-color: #a02020;
+    color: #ffffff;
+}
+
+/* Рецензии на странице трека */
+.reviews-section {
+    background: #0f0f0f;
+    border-radius: 28px;
+    padding: 32px;
+    border: 1px solid #1a1a1a;
+}
+
+.reviews-section h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+}
+
+.review-item {
+    background: #0a0a0a;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.review-item-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.review-item-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    background: #2a2a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    overflow: hidden;
+}
+
+.author-name {
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.author-name:hover {
+    color: #f5b041;
+    text-decoration: underline;
+}
+
+.review-item-stars {
+    display: flex;
+    gap: 4px;
+    font-size: 16px;
+}
+
+.review-item-date {
+    font-size: 12px;
+    color: #555;
+    margin-left: auto;
+}
+
+.review-item-text {
+    font-size: 15px;
+    color: #b0b0b0;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.review-item-footer {
+    display: flex;
+    gap: 20px;
+}
+
+/* ========== ФОРМА РЕЦЕНЗИИ ========== */
+.review-form-card {
+    background: #0f0f0f;
+    border-radius: 24px;
+    padding: 28px;
+    margin-bottom: 28px;
+    border: 1px solid #1a1a1a;
+}
+
+.review-form-card h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    margin-bottom: 18px;
+}
+
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    background: #121212;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 15px;
+    color: #e0e0e0;
+    font-family: inherit;
+}
+
+.form-row textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-review-btn {
+    background: #8b1a1a;
+    border: 1px solid #8b1a1a;
+    color: #e0e0e0;
+    padding: 12px 32px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submit-review-btn:hover {
+    background: #a02020;
+    color: #ffffff;
+}
+
+/* ========== ТОП РЕЦЕНЗИЙ ========== */
+.top-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px;
+    background: #0f0f0f;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #1a1a1a;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.top-item:hover {
+    background: #141414;
+    border-color: #2a2a2a;
+}
+
+.top-rank {
+    font-size: 32px;
+    min-width: 60px;
+}
+
+.top-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.top-artist {
+    font-size: 13px;
+    color: #888;
+}
+
+.top-stats {
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
+}
+
+/* ========== ПРОФИЛЬ ========== */
+.profile-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.profile-card {
+    background: #0f0f0f;
+    border-radius: 28px;
+    padding: 40px;
+    text-align: center;
+    border: 1px solid #1a1a1a;
+}
+
+.profile-avatar-large {
+    width: 140px;
+    height: 140px;
+    background: #2a2a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    margin: 0 auto 20px;
+    cursor: pointer;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.change-avatar-btn {
+    background: #1a1a1a;
+    border: 1px solid #3a3a3a;
+    color: #e0e0e0;
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.photo-upload {
+    margin-bottom: 20px;
+}
+
+.photo-upload-btn {
+    background: #1a1a1a;
+    border: 1px solid #3a3a3a;
+    color: #e0e0e0;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.photo-upload input {
+    display: none;
+}
+
+/* КНОПКА ВЫХОДА В ПРОФИЛЕ */
+.logout-btn-profile {
+    background: #1a1a1a;
+    border: 1px solid #4a2a2a;
+    color: #ff8888;
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+    width: 100%;
+    max-width: 200px;
+}
+
+.logout-btn-profile:hover {
+    background: #2a1a1a;
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin: 32px 0;
+    padding: 20px;
+    background: #0a0a0a;
+    border-radius: 20px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #888;
+}
+
+.user-reviews-list {
+    max-height: 450px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.user-review-item {
+    padding: 16px;
+    background: #0a0a0a;
+    border-radius: 16px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-review-item:hover {
+    background: #141414;
+}
+
+.user-review-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.user-review-artist {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.user-review-stars {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.user-review-text {
+    font-size: 13px;
+    color: #b0b0b0;
+}
+
+.user-review-likes {
+    font-size: 11px;
+    color: #666;
+    margin-top: 6px;
+}
+
+/* ========== МОДАЛКИ ========== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #121212;
+    border-radius: 28px;
+    padding: 36px;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
+    border: 1px solid #2a2a2a;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-close:hover {
+    color: #e0e0e0;
+}
+
+.modal-content h2 {
+    font-size: 26px;
+    margin-bottom: 28px;
+}
+
+.modal-input {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    font-size: 15px;
+    color: #e0e0e0;
+}
+
+.modal-btn {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #3a3a3a;
+    color: #e0e0e0;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.modal-hint {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin-top: 20px;
+}
+
+.modal-hint a {
+    color: #888;
+    text-decoration: none;
+}
+
+/* ========== АВАТАР ГРИД ========== */
+.avatar-grid {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.avatar-option {
+    width: 56px;
+    height: 56px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.avatar-option:hover {
+    background: #2a2a2a;
+    transform: scale(1.05);
+}
+
+/* ========== ПУСТОЕ СОСТОЯНИЕ ========== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 15px;
+}
+
+.loading {
+    text-align: center;
+    padding: 60px;
+    color: #888;
+    font-size: 16px;
+}
+
+/* ========== КЛИКАБЕЛЬНЫЕ ИМЕНА ========== */
+.author-name-clickable {
+    cursor: pointer;
+}
+
+.author-name-clickable:hover {
+    text-decoration: underline;
+    color: #f5b041;
+}
+
+.edit-profile-btn {
+    display: inline-block;
+    background: #1a1a1a;
+    border: 1px solid #3a3a3a;
+    color: #e0e0e0;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: all 0.2s;
+}
+
+.edit-profile-btn:hover {
+    background: #252525;
+    border-color: #4a4a4a;
+}
+
+/* ========== АДАПТАЦИЯ ПОД РАЗНЫЕ УСТРОЙСТВА ========== */
+
+/* Планшеты и маленькие ноутбуки (до 1100px) */
+@media (max-width: 1100px) {
+    .reviews-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    
+    .container {
+        padding: 0 20px;
+    }
+}
+
+/* Планшеты вертикально (до 900px) */
+@media (max-width: 900px) {
+    .header {
+        padding: 12px 20px;
+    }
+    
+    .header-left {
+        gap: 20px;
+    }
+    
+    .logo-text {
+        font-size: 20px;
+    }
+    
+    .nav-btn {
+        padding: 6px 14px;
+        font-size: 14px;
+    }
+    
+    .search-wrapper {
+        width: 220px;
+    }
+    
+    .search-dropdown {
+        width: 420px;
+    }
+    
+    .track-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 24px;
+        padding: 28px;
+    }
+    
+    .track-cover-large {
+        width: 200px;
+        height: 200px;
+        font-size: 80px;
+    }
+    
+    .track-info-large h1 {
+        font-size: 28px;
+    }
+    
+    .track-artist-large {
+        font-size: 18px;
+    }
+    
+    .track-meta {
+        justify-content: center;
+    }
+    
+    .track-rating-large {
+        justify-content: center;
+    }
+    
+    .review-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .review-item-date {
+        margin-left: 0;
+    }
+}
+
+/* Мобильные устройства (до 700px) */
+@media (max-width: 700px) {
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px 16px;
+    }
+    
+    .header-left {
+        justify-content: space-between;
+    }
+    
+    .header-right {
+        justify-content: flex-end;
+    }
+    
+    .search-wrapper {
+        width: 200px;
+    }
+    
+    .search-dropdown {
+        width: 380px;
+        right: 0;
+        left: auto;
+    }
+    
+    .search-dropdown-cover {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+    }
+    
+    .search-dropdown-title {
+        font-size: 14px;
+    }
+    
+    .search-dropdown-artist {
+        font-size: 12px;
+    }
+    
+    .search-dropdown-btn {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
+    .container {
+        padding: 0 16px;
+    }
+    
+    .track-page {
+        padding: 0 16px;
+    }
+    
+    .track-header {
+        padding: 20px;
+    }
+    
+    .track-cover-large {
+        width: 160px;
+        height: 160px;
+        font-size: 60px;
+    }
+    
+    .track-info-large h1 {
+        font-size: 24px;
+    }
+    
+    .track-artist-large {
+        font-size: 16px;
+    }
+    
+    .track-meta {
+        gap: 12px;
+    }
+    
+    .meta-item {
+        font-size: 12px;
+        padding: 4px 12px;
+    }
+    
+    .reviews-section {
+        padding: 20px;
+    }
+    
+    .review-item {
+        padding: 16px;
+    }
+    
+    .review-form-card {
+        padding: 20px;
+    }
+    
+    .profile-card {
+        padding: 24px;
+    }
+    
+    .profile-avatar-large {
+        width: 100px;
+        height: 100px;
+        font-size: 40px;
+    }
+    
+    .profile-stats {
+        gap: 32px;
+    }
+    
+    .stat-value {
+        font-size: 24px;
+    }
+}
+
+/* Маленькие телефоны (до 500px) */
+@media (max-width: 500px) {
+    .header-left {
+        gap: 12px;
+    }
+    
+    .logo-icon {
+        font-size: 24px;
+    }
+    
+    .logo-text {
+        font-size: 18px;
+    }
+    
+    .nav-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    
+    .header-right {
+        gap: 10px;
+    }
+    
+    .search-wrapper {
+        width: 160px;
+    }
+    
+    .search-input {
+        padding: 6px 10px 6px 32px;
+        font-size: 12px;
+    }
+    
+    .search-icon {
+        left: 10px;
+        font-size: 12px;
+    }
+    
+    .search-dropdown {
+        width: 320px;
+    }
+    
+    .search-dropdown-cover {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+    }
+    
+    .search-dropdown-title {
+        font-size: 13px;
+    }
+    
+    .search-dropdown-artist {
+        font-size: 11px;
+    }
+    
+    .search-dropdown-btn {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+    
+    .login-btn, .signup-btn {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+    
+    .profile-btn {
+        padding: 4px 12px 4px 6px;
+        font-size: 12px;
+    }
+    
+    .profile-avatar {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+    
+    .logout-btn {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    
+    .track-cover-placeholder {
+        font-size: 40px;
+    }
+    
+    .review-content {
+        padding: 12px;
+    }
+    
+    .track-title {
+        font-size: 15px;
+    }
+    
+    .track-artist {
+        font-size: 12px;
+    }
+    
+    .review-text {
+        font-size: 12px;
+        -webkit-line-clamp: 2;
+    }
+    
+    .track-cover-large {
+        width: 120px;
+        height: 120px;
+        font-size: 50px;
+    }
+    
+    .track-info-large h1 {
+        font-size: 20px;
+    }
+    
+    .track-artist-large {
+        font-size: 14px;
+    }
+    
+    .rating-stars-large {
+        font-size: 18px;
+    }
+    
+    .rating-value {
+        font-size: 18px;
+    }
+    
+    .write-review-track-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+    
+    .reviews-section h2 {
+        font-size: 20px;
+    }
+    
+    .author-name {
+        font-size: 14px;
+    }
+    
+    .review-item-text {
+        font-size: 13px;
+    }
+    
+    .profile-container {
+        padding: 0 16px;
+    }
+    
+    .profile-stats {
+        gap: 20px;
+    }
+    
+    .stat-value {
+        font-size: 20px;
+    }
+    
+    .modal-content {
+        padding: 24px;
+    }
+    
+    .modal-content h2 {
+        font-size: 22px;
+    }
+}
+
+/* Очень маленькие телефоны (до 380px) */
+@media (max-width: 380px) {
+    .search-wrapper {
+        width: 140px;
+    }
+    
+    .search-dropdown {
+        width: 280px;
+    }
+    
+    .search-dropdown-item {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+    
+    .search-dropdown-cover {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+    
+    .search-dropdown-title {
+        font-size: 12px;
+    }
+    
+    .search-dropdown-artist {
+        font-size: 10px;
+    }
+    
+    .search-dropdown-btn {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    .login-btn, .signup-btn {
+        padding: 4px 10px;
+        font-size: 11px;
+    }
+    
+    .profile-btn {
+        padding: 3px 10px 3px 5px;
+        font-size: 11px;
+    }
+    
+    .profile-avatar {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+    }
+}
+/* ========== ТОП ТРЕКОВ ========== */
+.top-tracks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.top-track-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #0f0f0f;
+    border-radius: 16px;
+    border: 1px solid #1a1a1a;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.top-track-item:hover {
+    background: #141414;
+    border-color: #2a2a2a;
+    transform: translateX(4px);
+}
+
+.top-rank {
+    font-size: 28px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.top-cover {
+    flex-shrink: 0;
+}
+
+.top-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-artist {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.top-stars {
+    display: flex;
+    gap: 3px;
+    font-size: 12px;
+}
+
+.top-stats {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.stat-badge {
+    background: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+}
+
+/* ========== ТОП ТРЕКОВ ========== */
+.top-tracks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.top-track-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #0f0f0f;
+    border-radius: 16px;
+    border: 1px solid #1a1a1a;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.top-track-item:hover {
+    background: #141414;
+    border-color: #2a2a2a;
+    transform: translateX(4px);
+}
+
+.top-rank {
+    font-size: 28px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.top-cover {
+    flex-shrink: 0;
+}
+
+.top-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-artist {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.top-stars {
+    display: flex;
+    gap: 3px;
+    font-size: 12px;
+}
+
+.top-stats {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.stat-badge {
+    background: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+}
+/* ========== ТОП ТРЕКОВ ========== */
+.top-tracks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.top-track-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #0f0f0f;
+    border-radius: 16px;
+    border: 1px solid #1a1a1a;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.top-track-item:hover {
+    background: #141414;
+    border-color: #2a2a2a;
+    transform: translateX(4px);
+}
+
+.top-rank {
+    font-size: 28px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.top-cover {
+    flex-shrink: 0;
+}
+
+.top-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-artist {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.top-stars {
+    display: flex;
+    gap: 3px;
+    font-size: 12px;
+}
+
+.top-stats {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.stat-badge {
+    background: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+}
+
+/* ========== ГЛАВНАЯ СТРАНИЦА (ПОПУЛЯРНЫЕ ТРЕКИ) ========== */
+.home-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.home-title {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e0e0e0, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.home-subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.top-tracks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.top-track-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #121212;
+    border-radius: 20px;
+    padding: 16px;
+    border: 1px solid #2a2a2a;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.top-track-card:hover {
+    transform: translateX(8px);
+    border-color: #4a4a4a;
+    background: #181818;
+}
+
+.track-rank {
+    font-size: 32px;
+    min-width: 55px;
+    text-align: center;
+}
+
+.track-cover-home {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1a1a1a;
+    flex-shrink: 0;
+}
+
+.track-cover-home img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cover-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+
+.track-info-home {
+    flex: 1;
+    min-width: 0;
+}
+
+.track-title-home {
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.track-artist-home {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.track-stats-home {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.more-tracks-link {
+    text-align: center;
+    margin-top: 32px;
+}
+
+.more-link {
+    display: inline-block;
+    background: #1a1a1a;
+    border: 1px solid #3a3a3a;
+    color: #e0e0e0;
+    padding: 10px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.more-link:hover {
+    background: #252525;
+    border-color: #4a4a4a;
+}
+
+@media (max-width: 600px) {
+    .top-track-card {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .track-rank {
+        font-size: 24px;
+        min-width: 40px;
+    }
+    
+    .track-cover-home {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .track-title-home {
+        font-size: 14px;
+    }
+    
+    .track-artist-home {
+        font-size: 11px;
+    }
+    
+    .track-stats-home .stat-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+}
+/* Значки ролей */
+.role-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.role-admin {
+    background: linear-gradient(135deg, #8b1a1a, #6a0f0f);
+    color: #ffd700;
+    border: 1px solid #ffd700;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+
+.role-moderator {
+    background: linear-gradient(135deg, #2a4a6a, #1a3a5a);
+    color: #aaddff;
+    border: 1px solid #4a8ab0;
+}
+
+/* Обводка для карточек админов и модеров */
+.review-item.admin-review {
+    border-left: 4px solid #ffd700;
+    background: linear-gradient(90deg, #1a0f0f, #0a0a0a);
+}
+
+.review-item.moderator-review {
+    border-left: 4px solid #4a8ab0;
+}
+
+.author-name.admin-name {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.author-name.moderator-name {
+    color: #6aaad0;
+    font-weight: bold;
+}
+/* Главная страница — карточки популярных треков */
+.popular-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.popular-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e0e0e0, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.popular-header p {
+    color: #666;
+    font-size: 14px;
+}
+
+.popular-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.popular-card {
+    background: #0f0f0f;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: 1px solid #1a1a1a;
+    position: relative;
+}
+
+.popular-card:hover {
+    transform: translateY(-8px);
+    border-color: #2a2a2a;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.popular-rank {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+}
+
+.popular-rank.gold {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+}
+
+.popular-rank.silver {
+    background: linear-gradient(135deg, #c0c0c0, #808080);
+    color: #000;
+}
+
+.popular-rank.bronze {
+    background: linear-gradient(135deg, #cd7f32, #8b4513);
+    color: #fff;
+}
+
+.popular-cover {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popular-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.popular-cover-placeholder {
+    font-size: 48px;
+}
+
+.popular-info {
+    padding: 12px;
+}
+
+.popular-title {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.popular-artist {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.popular-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+
+.popular-reviews {
+    color: #666;
+}
+
+.popular-score {
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.popular-score.high {
+    background: #4CAF50;
+    color: white;
+}
+
+.popular-score.medium {
+    background: #FFC107;
+    color: #000;
+}
+
+.popular-score.low {
+    background: #ff4444;
+    color: white;
+}
+/* Топ пользователей */
+.top-users-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.top-users-title {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e0e0e0, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.top-users-subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.top-users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.top-user-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 20px;
+    background: #0f0f0f;
+    border-radius: 16px;
+    border: 1px solid #1a1a1a;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.top-user-item:hover {
+    transform: translateX(8px);
+    border-color: #3a3a3a;
+    background: #141414;
+}
+
+.top-user-item.admin-user {
+    border-left: 4px solid #ffd700;
+}
+
+.top-user-item.moderator-user {
+    border-left: 4px solid #4a8ab0;
+}
+
+.top-user-rank {
+    font-size: 32px;
+    min-width: 55px;
+    text-align: center;
+}
+
+.top-user-avatar {
+    width: 56px;
+    height: 56px;
+    background: #2a2a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.top-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.top-user-info {
+    flex: 1;
+}
+
+.top-user-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.top-user-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+/* Случайный трек */
+.random-track-section {
+    margin-bottom: 40px;
+    background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid #2a2a2a;
+}
+
+.random-track-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.random-icon {
+    font-size: 24px;
+    background: #2a2a2a;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.random-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #888;
+    letter-spacing: 2px;
+}
+
+.random-track-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.random-track-card:hover {
+    transform: translateX(8px);
+}
+
+.random-track-cover {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1a1a1a;
+    flex-shrink: 0;
+}
+
+.random-track-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.random-cover-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+
+.random-track-info {
+    flex: 1;
+}
+
+.random-track-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.random-track-artist {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+.random-track-btn {
+    background: #4a6a8b;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.random-track-btn:hover {
+    background: #5a7a9b;
+    transform: scale(1.02);
+}
+
+@media (max-width: 600px) {
+    .random-track-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .random-track-cover {
+        width: 100px;
+        height: 100px;
+    }
+}
+@media (max-width: 600px) {
+    .top-user-item {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .top-user-rank {
+        min-width: 45px;
+        font-size: 24px;
+    }
+    
+    .top-user-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+    
+    .top-user-name {
+        font-size: 15px;
+    }
+    
+    .top-user-stats .stat-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+}
+/* Адаптация для мобильных */
+@media (max-width: 1000px) {
+    .popular-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .popular-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .popular-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .popular-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 700px) {
+    .top-track-item {
+        flex-wrap: wrap;
+    }
+    
+    .top-stats {
+        width: 100%;
+        justify-content: flex-start;
+        margin-left: 76px;
+    }
+    
+    .top-rank {
+        min-width: 50px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 500px) {
+    .top-stats {
+        flex-direction: column;
+        gap: 6px;
+        margin-left: 66px;
+    }
+    
+    .stat-badge {
+        width: fit-content;
+    }
+}
+
+@media (max-width: 700px) {
+    .top-track-item {
+        flex-wrap: wrap;
+    }
+    
+    .top-stats {
+        width: 100%;
+        justify-content: flex-start;
+        margin-left: 76px;
+    }
+    
+    .top-rank {
+        min-width: 50px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 500px) {
+    .top-stats {
+        flex-direction: column;
+        gap: 6px;
+        margin-left: 66px;
+    }
+    
+    .stat-badge {
+        width: fit-content;
+    }
+}
+
+@media (max-width: 700px) {
+    .top-track-item {
+        flex-wrap: wrap;
+    }
+    
+    .top-stats {
+        width: 100%;
+        justify-content: flex-start;
+        margin-left: 76px;
+    }
+    
+    .top-rank {
+        min-width: 50px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 500px) {
+    .top-stats {
+        flex-direction: column;
+        gap: 6px;
+        margin-left: 66px;
+    }
+    
+    .stat-badge {
+        width: fit-content;
+    }
+}

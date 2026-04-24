@@ -1,0 +1,5 @@
+{
+    "watch": ["server.js", "database.js"],
+    "ext": "js",
+    "exec": "node server.js"
+}

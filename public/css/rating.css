@@ -1,0 +1,160 @@
+/* ========== СИСТЕМА ОЦЕНИВАНИЯ (5 КРИТЕРИЕВ) ========== */
+
+/* Ползунки для критериев */
+.criteria-sliders {
+    background: #121212;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2a2a2a;
+}
+
+.slider-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.slider-group label {
+    min-width: 160px;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.criteria-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    outline: none;
+}
+
+.criteria-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.criteria-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    background: #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.slider-value {
+    min-width: 30px;
+    text-align: center;
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Полосы критериев для отображения */
+.criteria-bars {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+}
+
+.criterion-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.criterion-bar:last-child {
+    margin-bottom: 0;
+}
+
+.criterion-label {
+    min-width: 140px;
+    color: #888;
+    font-size: 13px;
+}
+
+.criterion-track {
+    flex: 1;
+    height: 8px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.criterion-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.criterion-value {
+    min-width: 40px;
+    text-align: right;
+    color: #e0e0e0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Мини-отображение баллов */
+.mini-score {
+    background: #1a1a1a;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+/* Итоговый балл в рецензиях */
+.total-score {
+    background: #1a1a1a;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 16px;
+}
+
+.review-score {
+    display: flex;
+    align-items: center;
+}
+
+.review-item-score {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Обновленные стили для топа */
+.top-score {
+    color: #888;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* Рейтинг на странице трека */
+.track-rating-large {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.rating-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.rating-count {
+    color: #888;
+    font-size: 14px;
+}
