@@ -5,6 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fostberg — популярные треки</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* КНОПКА ВСЕ ОЦЕНЁННЫЕ ТРЕКИ - ЭКСТРЕННЫЕ СТИЛИ */
+        .more-tracks-link {
+            text-align: center !important;
+            margin-top: 32px !important;
+            margin-bottom: 40px !important;
+        }
+        
+        .more-link {
+            display: inline-block !important;
+            background: #1a0a0a !important;
+            border: 2px solid #c41e3a !important;
+            color: #e0e0e0 !important;
+            padding: 12px 28px !important;
+            border-radius: 40px !important;
+            text-decoration: none !important;
+            font-size: 15px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            font-family: 'Cinzel', serif !important;
+            letter-spacing: 1px !important;
+        }
+        
+        .more-link:hover {
+            background: #c41e3a !important;
+            border-color: #c41e3a !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 5px 15px rgba(196, 30, 58, 0.3) !important;
+        }
+        
+        /* СТИЛИ ДЛЯ СТРАНИЦЫ ВСЕХ ТРЕКОВ */
+        .track-list-item {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+            padding: 16px !important;
+            background: #0f0f0f !important;
+            border-radius: 16px !important;
+            border: 1px solid #2a1a1a !important;
+            transition: all 0.2s !important;
+            cursor: pointer !important;
+        }
+        
+        .track-list-item:hover {
+            background: #141414 !important;
+            border-color: #c41e3a !important;
+            transform: translateX(4px) !important;
+        }
+        
+        .stat-badge {
+            padding: 5px 12px !important;
+            border-radius: 20px !important;
+            font-size: 12px !important;
+            font-weight: 500 !important;
+            background: #1a0a0a !important;
+            color: #b8a8a8 !important;
+            white-space: nowrap !important;
+        }
+        
+        .stat-badge.high {
+            background: #2d4a2d !important;
+            color: #9bcd9b !important;
+        }
+        
+        .stat-badge.medium {
+            background: #5a4a2a !important;
+            color: #d4b86a !important;
+        }
+        
+        .stat-badge.low {
+            background: #4a2a2a !important;
+            color: #cd8b8b !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -15,13 +91,11 @@
                     <span class="logo-text">Fostberg</span>
                 </a>
                 <nav class="nav">
-<nav class="nav">
-    <a href="index.html" class="nav-btn active">Популярные</a>
-    <a href="top.html" class="nav-btn">Топ пользователей</a>
-    <a href="tracks.html" class="nav-btn">Все треки</a>
-    <a href="write-review.html" class="nav-btn write-btn">✍️ Написать</a>
-    <a href="add-track.html" class="nav-btn">➕ Добавить трек</a>
-</nav>
+                    <a href="index.html" class="nav-btn active">Популярные</a>
+                    <a href="top.html" class="nav-btn">Топ пользователей</a>
+                    <a href="tracks.html" class="nav-btn">Все треки</a>
+                    <a href="write-review.html" class="nav-btn write-btn">✍️ Написать</a>
+                    <a href="add-track.html" class="nav-btn">➕ Добавить трек</a>
                 </nav>
             </div>
             <div class="header-right">
