@@ -6,397 +6,280 @@
     <title>Админ-панель — Fostberg</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .admin-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .admin-header h1 {
-            font-size: 28px;
-            color: #e0e0e0;
-        }
-        .back-link {
-            color: #888;
-            text-decoration: none;
-            padding: 8px 16px;
-            background: #1a1a1a;
-            border-radius: 8px;
-        }
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #0f0f0f;
-            border-radius: 16px;
-            overflow: hidden;
-        }
-        .users-table th, .users-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .users-table th {
-            background: #1a1a1a;
-            color: #e0e0e0;
-        }
-        .role-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Шапка */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #2a2a2a; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .header-left { display: flex; align-items: center; gap: 32px; }
+        .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .logo-icon { font-size: 28px; }
+        .logo-text { font-size: 22px; font-weight: 700; color: #e0e0e0; }
+        .nav { display: flex; gap: 8px; }
+        .nav-btn { background: transparent; border: none; color: #888; padding: 8px 18px; font-size: 14px; cursor: pointer; border-radius: 30px; text-decoration: none; }
+        .nav-btn:hover { color: #e0e0e0; background: #1a1a1a; }
+        .write-btn { background: #8b1a1a; color: #e0e0e0; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .auth-buttons { display: flex; gap: 8px; }
+        .login-btn, .signup-btn { background: transparent; border: 1px solid #2a2a2a; color: #e0e0e0; padding: 8px 20px; border-radius: 30px; cursor: pointer; }
+        .user-menu { display: flex; align-items: center; gap: 8px; }
+        .profile-btn { display: flex; align-items: center; gap: 8px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 40px; padding: 5px 16px 5px 8px; text-decoration: none; color: #e0e0e0; }
+        .profile-avatar { width: 28px; height: 28px; background: #2a2a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+        /* Админ-панель */
+        .admin-container { padding: 20px 0; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .admin-header h1 { font-size: 28px; }
+        .back-link { color: #888; text-decoration: none; padding: 8px 16px; background: #1a1a1a; border-radius: 8px; }
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px; flex-wrap: wrap; }
+        .nav-tab { background: none; border: none; color: #888; padding: 10px 20px; cursor: pointer; border-radius: 8px; font-size: 14px; }
+        .nav-tab:hover { color: #e0e0e0; background: #1a1a1a; }
+        .nav-tab.active { color: #e0e0e0; background: #4a6a8b; }
+        
+        /* Таблица пользователей */
+        .users-table { width: 100%; border-collapse: collapse; background: #0f0f0f; border-radius: 16px; overflow: hidden; }
+        .users-table th, .users-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #2a2a2a; }
+        .users-table th { background: #1a1a1a; color: #e0e0e0; }
+        .role-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
         .role-admin { background: #8b1a1a; color: #fff; }
         .role-moderator { background: #4a6a8b; color: #fff; }
         .role-user { background: #2a2a2a; color: #888; }
-        .action-btn {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            margin-right: 8px;
-        }
+        .action-btn { padding: 6px 12px; border-radius: 8px; border: none; cursor: pointer; margin-right: 8px; font-size: 12px; transition: all 0.2s; }
         .btn-moderator { background: #4a6a8b; color: white; }
         .btn-user { background: #2a2a2a; color: #888; }
-        .btn-delete { background: #8b1a1a; color: white; }
-        .loading { text-align: center; padding: 40px; color: #888; }
-        .error-message { background: #8b1a1a; color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
-        .success-message { background: #1a4a1a; color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
-        .stats {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .stat-card {
-            background: #0f0f0f;
-            padding: 15px 25px;
-            border-radius: 12px;
-            border: 1px solid #2a2a2a;
-        }
+        .btn-delete { background: #d32f2f; color: white; }
+        .btn-edit { background: #ff9800; color: white; }
+        .btn-save { background: #4CAF50; color: white; }
+        .btn-cancel { background: #555; color: white; }
+        .btn-approve { background: #4CAF50; color: white; }
+        .btn-reject { background: #d32f2f; color: white; }
+        .btn-refresh { background: #4a6a8b; color: white; }
+        
+        /* Треки */
+        .tracks-header { display: flex; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .tracks-list { max-height: 600px; overflow-y: auto; }
+        .track-edit-item { background: #1a1a1a; border-radius: 8px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .track-info { flex: 2; min-width: 200px; }
+        .track-title-display { font-weight: bold; margin-bottom: 5px; }
+        .track-artist-display { color: #888; font-size: 13px; }
+        .track-edit-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .track-edit-form input { padding: 8px 12px; background: #0a0a0a; border: 1px solid #3a3a3a; border-radius: 6px; color: #e0e0e0; }
+        
+        /* Предложения */
+        .suggestions-list { max-height: 600px; overflow-y: auto; }
+        .suggestion-item { background: #1a1a1a; border-radius: 12px; padding: 16px; margin-bottom: 16px; border-left: 4px solid #ff9800; }
+        .suggestion-header { display: flex; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .suggestion-date { color: #888; font-size: 12px; }
+        .suggestion-changes { background: #0a0a0a; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+        .change-row { margin-bottom: 6px; font-size: 13px; }
+        .old-value { color: #ff8888; text-decoration: line-through; margin-right: 8px; }
+        .arrow { color: #ff9800; margin-right: 8px; }
+        .new-value { color: #88ff88; }
+        
+        /* Общее */
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .page-btn { background: #1a1a1a; border: 1px solid #2a2a2a; color: #e0e0e0; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+        .page-btn.active { background: #4a6a8b; }
+        .search-input { padding: 10px; background: #1a1a1a; border: 1px solid #3a3a3a; border-radius: 8px; color: #e0e0e0; width: 300px; }
+        .stats { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-card { background: #0f0f0f; padding: 15px 25px; border-radius: 12px; border: 1px solid #2a2a2a; }
         .stat-number { font-size: 28px; font-weight: bold; color: #4CAF50; }
         .stat-label { color: #888; font-size: 13px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #666; }
+        .error-message { background: #8b1a1a; color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
+        .success-message { background: #1a4a1a; color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #121212; border-radius: 20px; padding: 24px; width: 90%; max-width: 450px; border: 1px solid #2a2a2a; }
+        .modal-close { float: right; font-size: 24px; cursor: pointer; color: #888; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 13px; }
+        .modal-input { width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #3a3a3a; border-radius: 8px; color: #e0e0e0; }
+        .modal-btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
             <div class="header-left">
-                <a href="index.html" class="logo">
-                    <span class="logo-icon">🎧</span>
-                    <span class="logo-text">Fostberg</span>
-                </a>
+                <a href="index.html" class="logo"><span class="logo-icon">🎧</span><span class="logo-text">Fostberg</span></a>
+<button class="mobile-toggle" id="mobileToggle" style="display: none; background: none; border: none; color: #e0e0e0; font-size: 28px; cursor: pointer;">☰</button>
 <nav class="nav">
     <a href="index.html" class="nav-btn">Популярные</a>
     <a href="top.html" class="nav-btn">Топ пользователей</a>
     <a href="tracks.html" class="nav-btn">Все треки</a>
     <a href="write-review.html" class="nav-btn write-btn">✍️ Написать</a>
-    <a href="add-track.html" class="nav-btn">➕ Добавить трек</a>
+    <a href="add-track.html" class="nav-btn active">➕ Добавить трек</a>
 </nav>
             </div>
             <div class="header-right">
-                <div class="auth-buttons" id="authButtons">
-                    <button class="login-btn" id="loginBtn">Войти</button>
-                </div>
-                <div class="user-menu" id="userMenu" style="display:none">
-                    <span id="profileName"></span>
-                    <div class="profile-avatar" id="profileAvatar">👤</div>
-                </div>
+                <div class="auth-buttons" id="authButtons"><button class="login-btn" id="loginBtn">Войти</button></div>
+                <div class="user-menu" id="userMenu" style="display:none"><span id="profileName"></span><div class="profile-avatar" id="profileAvatar">👤</div></div>
             </div>
         </header>
-
-        <main>
-            <div class="admin-container" id="adminContent">
-                <div class="loading">Проверка прав доступа...</div>
-            </div>
-        </main>
+        <main><div class="admin-container" id="adminContent"><div class="empty-state">Проверка прав доступа...</div></div></main>
     </div>
 
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2>Вход</h2>
-            <form id="loginForm">
-                <input type="email" id="loginEmail" placeholder="Email" required>
-                <input type="password" id="loginPassword" placeholder="Пароль" required>
-                <button type="submit">Войти</button>
-            </form>
-            <p>Нет аккаунта? <a href="#" id="switchToSignup">Зарегистрироваться</a></p>
-        </div>
-    </div>
-
-    <div class="modal" id="signupModal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2>Регистрация</h2>
-            <form id="signupForm">
-                <input type="text" id="signupUsername" placeholder="Имя пользователя" required>
-                <input type="email" id="signupEmail" placeholder="Email" required>
-                <input type="password" id="signupPassword" placeholder="Пароль" required>
-                <button type="submit">Зарегистрироваться</button>
-            </form>
-            <p>Уже есть аккаунт? <a href="#" id="switchToLogin">Войти</a></p>
-        </div>
-    </div>
+    <div class="modal" id="loginModal"><div class="modal-content"><span class="modal-close">&times;</span><h2>Вход</h2><form id="loginForm"><input type="email" id="loginEmail" placeholder="Email" required><input type="password" id="loginPassword" placeholder="Пароль" required><button type="submit" class="modal-btn">Войти</button></form><p>Нет аккаунта? <a href="#" id="switchToSignup">Зарегистрироваться</a></p></div></div>
+    <div class="modal" id="signupModal"><div class="modal-content"><span class="modal-close">&times;</span><h2>Регистрация</h2><form id="signupForm"><input type="text" id="signupUsername" placeholder="Имя пользователя" required><input type="email" id="signupEmail" placeholder="Email" required><input type="password" id="signupPassword" placeholder="Пароль" required><button type="submit" class="modal-btn">Зарегистрироваться</button></form><p>Уже есть аккаунт? <a href="#" id="switchToLogin">Войдите</a></p></div></div>
 
     <script>
-        const API_URL = 'http://localhost:3000/api';
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://fostberg.onrender.com/api';
         let token = localStorage.getItem('fostberg_token');
         let currentUser = null;
 
-        // Загружаем текущего пользователя
+        async function apiRequest(url, options = {}) {
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            const res = await fetch(`${API_URL}${url}`, { ...options, headers });
+            if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Ошибка'); }
+            return res.json();
+        }
+
         async function loadCurrentUser() {
             if (!token) return null;
             try {
-                const res = await fetch(`${API_URL}/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    currentUser = await res.json();
-                    localStorage.setItem('fostberg_user', JSON.stringify(currentUser));
-                    return currentUser;
-                }
+                const res = await fetch(`${API_URL}/me`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (res.ok) { currentUser = await res.json(); localStorage.setItem('fostberg_user', JSON.stringify(currentUser)); return currentUser; }
             } catch(e) {}
             return null;
         }
 
         function updateUI() {
-            const authDiv = document.getElementById('authButtons');
-            const userDiv = document.getElementById('userMenu');
-            const profileName = document.getElementById('profileName');
-            if (currentUser) {
-                authDiv.style.display = 'none';
-                userDiv.style.display = 'flex';
-                if (profileName) profileName.textContent = currentUser.username;
-            } else {
-                authDiv.style.display = 'flex';
-                userDiv.style.display = 'none';
-            }
+            const authDiv = document.getElementById('authButtons'), userDiv = document.getElementById('userMenu'), profileName = document.getElementById('profileName');
+            if (currentUser) { authDiv.style.display = 'none'; userDiv.style.display = 'flex'; if (profileName) profileName.textContent = currentUser.username; }
+            else { authDiv.style.display = 'flex'; userDiv.style.display = 'none'; }
         }
 
+        function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        function showMessage(msg, type) {
+            const div = document.getElementById('adminMessage');
+            if (div) { div.innerHTML = `<div class="${type === 'success' ? 'success-message' : 'error-message'}">${msg}</div>`; setTimeout(() => div.innerHTML = '', 3000); }
+        }
+
+        // ========== ПОЛЬЗОВАТЕЛИ ==========
+        let allUsers = [];
+        async function loadUsers() {
+            try { allUsers = await apiRequest('/admin/users'); renderUsers(); updateStats(); } 
+            catch(e) { document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="5" class="empty-state">Ошибка</td></tr>`; }
+        }
+        function renderUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = allUsers.map(u => {
+                let roleClass = u.role === 'admin' ? 'role-admin' : (u.role === 'moderator' ? 'role-moderator' : 'role-user');
+                let roleText = u.role === 'admin' ? 'Админ' : (u.role === 'moderator' ? 'Модератор' : 'Пользователь');
+                const isCurrent = currentUser && currentUser.id === u.id;
+                return `<tr><td>${u.id}</td><td>${escapeHtml(u.username)} ${isCurrent ? '👑' : ''}</td><td>${escapeHtml(u.email)}</td><td><span class="role-badge ${roleClass}">${roleText}</span></td>
+                <td>${u.role !== 'admin' ? (u.role !== 'moderator' ? `<button class="action-btn btn-moderator" onclick="changeRole(${u.id}, 'moderator')">🔨 Модератор</button>` : `<button class="action-btn btn-user" onclick="changeRole(${u.id}, 'user')">👤 Пользователь</button>`) : ''}
+                ${!isCurrent && u.role !== 'admin' ? `<button class="action-btn btn-delete" onclick="deleteUser(${u.id})">🗑 Удалить</button>` : ''}</td></tr>`;
+            }).join('');
+        }
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            if (stats) stats.innerHTML = `<div class="stat-card"><div class="stat-number">${allUsers.length}</div><div class="stat-label">Всего</div></div>
+                <div class="stat-card"><div class="stat-number">${allUsers.filter(u => u.role === 'admin').length}</div><div class="stat-label">Админы</div></div>
+                <div class="stat-card"><div class="stat-number">${allUsers.filter(u => u.role === 'moderator').length}</div><div class="stat-label">Модераторы</div></div>
+                <div class="stat-card"><div class="stat-number">${allUsers.filter(u => u.role === 'user').length}</div><div class="stat-label">Пользователи</div></div>`;
+        }
+        async function changeRole(id, role) { if (!confirm('Изменить роль?')) return; try { await apiRequest(`/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }); showMessage('✅ Роль изменена', 'success'); loadUsers(); } catch(e) { showMessage('❌ Ошибка', 'error'); } }
+        async function deleteUser(id) { if (!confirm('Удалить пользователя?')) return; try { await apiRequest(`/admin/users/${id}`, { method: 'DELETE' }); showMessage('✅ Удалён', 'success'); loadUsers(); } catch(e) { showMessage('❌ Ошибка', 'error'); } }
+
+        // ========== ТРЕКИ ==========
+        let allTracks = [], currentTrackPage = 1, TRACKS_PER_PAGE = 20;
+        async function loadTracks() { try { allTracks = await apiRequest('/admin/tracks'); renderTracks(); } catch(e) { document.getElementById('tracksList').innerHTML = '<div class="error-message">Ошибка</div>'; } }
+        function renderTracks() {
+            const search = document.getElementById('trackSearch')?.value.toLowerCase() || '';
+            let filtered = search ? allTracks.filter(t => t.title.toLowerCase().includes(search) || t.artist.toLowerCase().includes(search)) : allTracks;
+            const start = (currentTrackPage-1)*TRACKS_PER_PAGE, paginated = filtered.slice(start, start+TRACKS_PER_PAGE), totalPages = Math.ceil(filtered.length/TRACKS_PER_PAGE);
+            const container = document.getElementById('tracksList');
+            if (!container) return;
+            container.innerHTML = paginated.map(t => `<div class="track-edit-item" id="track-${t.id}">
+                <div class="track-info"><div class="track-title-display">${escapeHtml(t.title)}</div><div class="track-artist-display">${escapeHtml(t.artist)}</div><div class="track-artist-display" style="color:#666; font-size:11px;">📝 ${t.reviews_count} рецензий</div></div>
+                <div class="track-edit-form" id="edit-form-${t.id}" style="display:none;"><input type="text" id="edit-title-${t.id}" value="${escapeHtml(t.title)}" placeholder="Название"><input type="text" id="edit-artist-${t.id}" value="${escapeHtml(t.artist)}" placeholder="Исполнитель"><button class="action-btn btn-save" onclick="saveTrack(${t.id})">💾 Сохранить</button><button class="action-btn btn-cancel" onclick="cancelEdit(${t.id})">❌ Отмена</button></div>
+                <div class="track-actions" id="actions-${t.id}"><button class="action-btn btn-edit" onclick="showEditForm(${t.id})">✏️ Редактировать</button><button class="action-btn btn-delete" onclick="deleteTrack(${t.id})">🗑 Удалить</button></div>
+            </div>`).join('');
+            if(totalPages>1) container.innerHTML += `<div class="pagination">${Array.from({length:totalPages},(_,i)=>i+1).map(p=>`<button class="page-btn ${p===currentTrackPage?'active':''}" onclick="goToTrackPage(${p})">${p}</button>`).join('')}</div>`;
+        }
+        function goToTrackPage(p) { currentTrackPage = p; renderTracks(); }
+        function showEditForm(id) { document.getElementById(`actions-${id}`).style.display = 'none'; document.getElementById(`edit-form-${id}`).style.display = 'flex'; }
+        function cancelEdit(id) { document.getElementById(`edit-form-${id}`).style.display = 'none'; document.getElementById(`actions-${id}`).style.display = 'flex'; }
+        async function saveTrack(id) { const title = document.getElementById(`edit-title-${id}`).value.trim(), artist = document.getElementById(`edit-artist-${id}`).value.trim(); if(!title&&!artist){showMessage('Заполните хотя бы одно поле','error');return;}
+            try{await apiRequest(`/admin/tracks/${id}`,{method:'PUT',body:JSON.stringify({title,artist})});showMessage('✅ Обновлено','success');cancelEdit(id);loadTracks();}catch(e){showMessage('❌ Ошибка','error');} }
+        async function deleteTrack(id){if(!confirm('Удалить трек?'))return;try{await apiRequest(`/admin/tracks/${id}`,{method:'DELETE'});showMessage('✅ Удалён','success');loadTracks();}catch(e){showMessage('❌ Ошибка','error');}}
+
+        // ========== ПРЕДЛОЖЕНИЯ ==========
+        let allSuggestions = [];
+        async function loadSuggestions() { try { allSuggestions = await apiRequest('/admin/suggestions'); renderSuggestions(); } catch(e) { document.getElementById('suggestionsList').innerHTML = '<div class="error-message">Ошибка</div>'; } }
+        function renderSuggestions() {
+            const container = document.getElementById('suggestionsList');
+            if (!container) return;
+            if (allSuggestions.length === 0) { container.innerHTML = '<div class="empty-state">📭 Нет предложений</div>'; return; }
+            container.innerHTML = allSuggestions.map(s => `<div class="suggestion-item">
+                <div class="suggestion-header"><strong>${escapeHtml(s.username)}</strong> предложил(а) изменение для <strong>«${escapeHtml(s.current_title)}»</strong><span class="suggestion-date">${new Date(s.created_at).toLocaleDateString()}</span></div>
+                <div class="suggestion-changes">${s.suggested_title ? `<div class="change-row"><span class="old-value">${escapeHtml(s.current_title)}</span><span class="arrow">→</span><span class="new-value">${escapeHtml(s.suggested_title)}</span></div>` : ''}
+                ${s.suggested_artist ? `<div class="change-row"><span class="old-value">${escapeHtml(s.current_artist)}</span><span class="arrow">→</span><span class="new-value">${escapeHtml(s.suggested_artist)}</span></div>` : ''}</div>
+                <div class="suggestion-actions"><button class="action-btn btn-approve" onclick="approveSuggestion(${s.id})">✅ Одобрить</button>
+                <button class="action-btn btn-reject" onclick="rejectSuggestion(${s.id})">❌ Отклонить</button>
+                <button class="action-btn btn-edit" onclick="editAndApprove(${s.id}, '${escapeHtml(s.suggested_title || s.current_title)}', '${escapeHtml(s.suggested_artist || s.current_artist)}')">✏️ Изменить и одобрить</button></div>
+            </div>`).join('');
+        }
+        async function approveSuggestion(id) { try { await apiRequest(`/admin/suggestions/${id}/approve`, { method: 'POST' }); showMessage('✅ Одобрено', 'success'); loadSuggestions(); loadTracks(); } catch(e) { showMessage('❌ Ошибка', 'error'); } }
+        async function rejectSuggestion(id) { try { await apiRequest(`/admin/suggestions/${id}/reject`, { method: 'POST' }); showMessage('❌ Отклонено', 'success'); loadSuggestions(); } catch(e) { showMessage('❌ Ошибка', 'error'); } }
+        function editAndApprove(id, curTitle, curArtist) {
+            const modal = document.createElement('div'); modal.className = 'modal'; modal.style.display = 'flex';
+            modal.innerHTML = `<div class="modal-content"><span class="modal-close">&times;</span><h3>✏️ Редактировать</h3><div class="form-group"><label>Название</label><input type="text" id="editTitle" value="${escapeHtml(curTitle)}" class="modal-input"></div>
+            <div class="form-group"><label>Исполнитель</label><input type="text" id="editArtist" value="${escapeHtml(curArtist)}" class="modal-input"></div>
+            <div style="display:flex; gap:10px;"><button id="submitEdit" class="modal-btn" style="background:#4CAF50;">✅ Одобрить</button><button id="cancelEdit" class="modal-btn" style="background:#555;">Отмена</button></div></div>`;
+            document.body.appendChild(modal);
+            modal.querySelector('.modal-close').onclick = () => modal.remove();
+            modal.querySelector('#cancelEdit').onclick = () => modal.remove();
+            modal.querySelector('#submitEdit').onclick = async () => {
+                const title = document.getElementById('editTitle').value.trim(), artist = document.getElementById('editArtist').value.trim();
+                try { await apiRequest(`/admin/suggestions/${id}/approve`, { method: 'POST', body: JSON.stringify({ suggestedTitle: title, suggestedArtist: artist }) }); showMessage('✅ Обновлено', 'success'); modal.remove(); loadSuggestions(); loadTracks(); } 
+                catch(e) { showMessage('❌ Ошибка', 'error'); }
+            };
+        }
+
+        // ========== ВКЛАДКИ ==========
+        function showUsersTab() { document.getElementById('usersPanel').style.display = 'block'; document.getElementById('tracksPanel').style.display = 'none'; document.getElementById('suggestionsPanel').style.display = 'none'; 
+            document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active')); document.querySelector('[onclick="showUsersTab()"]').classList.add('active'); loadUsers(); }
+        function showTracksTab() { document.getElementById('usersPanel').style.display = 'none'; document.getElementById('tracksPanel').style.display = 'block'; document.getElementById('suggestionsPanel').style.display = 'none';
+            document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active')); document.querySelector('[onclick="showTracksTab()"]').classList.add('active'); loadTracks(); }
+        function showSuggestionsTab() { document.getElementById('usersPanel').style.display = 'none'; document.getElementById('tracksPanel').style.display = 'none'; document.getElementById('suggestionsPanel').style.display = 'block';
+            document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active')); document.querySelector('[onclick="showSuggestionsTab()"]').classList.add('active'); loadSuggestions(); }
+
+        // ========== ОСНОВНАЯ ЛОГИКА ==========
         async function checkAdminAndLoad() {
             const container = document.getElementById('adminContent');
-            
-            // Загружаем пользователя если ещё нет
-            if (!currentUser && token) {
-                await loadCurrentUser();
-                updateUI();
-            }
-            
-            // Проверяем права
+            if (!currentUser && token) await loadCurrentUser();
+            updateUI();
             if (!currentUser || currentUser.role !== 'admin') {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div style="font-size:48px;margin-bottom:16px;">🔒</div>
-                        <div>Доступ запрещён</div>
-                        <div style="margin-top:16px;">Только администраторы могут просматривать эту страницу</div>
-                        <a href="index.html" style="display:inline-block; margin-top:16px; color:#4CAF50;">← Вернуться на главную</a>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state"><div style="font-size:48px">🔒</div><div>Доступ запрещён</div><a href="index.html" style="color:#4CAF50;">← На главную</a></div>`;
                 return;
             }
-            
-            // Загружаем админ-панель
-            await loadAdminPanel();
+            container.innerHTML = `<div class="admin-header"><h1>👑 Админ-панель</h1><a href="index.html" class="back-link">← На главную</a></div>
+                <div class="admin-tabs"><button class="nav-tab active" onclick="showUsersTab()">👥 Пользователи</button><button class="nav-tab" onclick="showTracksTab()">🎵 Оценённые треки</button><button class="nav-tab" onclick="showSuggestionsTab()">📝 Предложения</button></div>
+                <div id="adminMessage"></div><div id="stats" class="stats"></div>
+                <div id="usersPanel"><table class="users-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Роль</th><th>Действия</th></tr></thead><tbody id="usersTableBody"><tr><td colspan="5" class="empty-state">Загрузка...</td></tr></tbody></table></div>
+                <div id="tracksPanel" style="display:none;"><div class="tracks-header"><h3>Оценённые треки</h3><input type="text" id="trackSearch" placeholder="Поиск..." class="search-input"></div><div id="tracksList">Загрузка...</div></div>
+                <div id="suggestionsPanel" style="display:none;"><div id="suggestionsList">Загрузка...</div></div>`;
+            document.getElementById('trackSearch')?.addEventListener('input', () => { currentTrackPage = 1; renderTracks(); });
+            await loadUsers(); await loadTracks(); await loadSuggestions();
         }
 
-        async function loadAdminPanel() {
-            const container = document.getElementById('adminContent');
-            container.innerHTML = `
-                <div class="admin-header">
-                    <h1>👑 Админ-панель</h1>
-                    <a href="index.html" class="back-link">← На главную</a>
-                </div>
-                <div id="adminMessage"></div>
-                <div class="stats" id="stats"></div>
-                <div class="users-table-container">
-                    <table class="users-table">
-                        <thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Роль</th><th>Действия</th></tr></thead>
-                        <tbody id="usersTableBody"><tr><td colspan="5" class="loading">Загрузка...</td></tr></tbody>
-                    </table>
-                </div>
-            `;
-            await loadUsers();
-        }
-
-        async function loadUsers() {
-            try {
-                const res = await fetch(`${API_URL}/admin/users`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (!res.ok) throw new Error('Нет доступа');
-                const users = await res.json();
-                
-                const stats = {
-                    total: users.length,
-                    admins: users.filter(u => u.role === 'admin').length,
-                    moderators: users.filter(u => u.role === 'moderator').length,
-                    users: users.filter(u => u.role === 'user').length
-                };
-                
-                document.getElementById('stats').innerHTML = `
-                    <div class="stat-card"><div class="stat-number">${stats.total}</div><div class="stat-label">Всего</div></div>
-                    <div class="stat-card"><div class="stat-number">${stats.admins}</div><div class="stat-label">Админы</div></div>
-                    <div class="stat-card"><div class="stat-number">${stats.moderators}</div><div class="stat-label">Модераторы</div></div>
-                    <div class="stat-card"><div class="stat-number">${stats.users}</div><div class="stat-label">Пользователи</div></div>
-                `;
-                
-                const tbody = document.getElementById('usersTableBody');
-                tbody.innerHTML = users.map(user => {
-                    let roleClass = user.role === 'admin' ? 'role-admin' : (user.role === 'moderator' ? 'role-moderator' : 'role-user');
-                    let roleText = user.role === 'admin' ? 'Администратор' : (user.role === 'moderator' ? 'Модератор' : 'Пользователь');
-                    const isCurrentUser = currentUser && currentUser.id === user.id;
-                    
-                    return `
-                        <tr>
-                            <td>${user.id}</td>
-                            <td>${escapeHtml(user.username)} ${isCurrentUser ? '👑 (вы)' : ''}</td>
-                            <td>${escapeHtml(user.email)}</td>
-                            <td><span class="role-badge ${roleClass}">${roleText}</span></td>
-                            <td>
-                                ${user.role !== 'admin' ? `
-                                    ${user.role !== 'moderator' ? 
-                                        `<button class="action-btn btn-moderator" onclick="changeRole(${user.id}, 'moderator')">🔨 Сделать модератором</button>` : 
-                                        `<button class="action-btn btn-user" onclick="changeRole(${user.id}, 'user')">👤 Сделать пользователем</button>`
-                                    }
-                                ` : ''}
-                                ${!isCurrentUser && user.role !== 'admin' ? 
-                                    `<button class="action-btn btn-delete" onclick="deleteUser(${user.id})">🗑 Удалить</button>` : ''
-                                }
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            } catch(e) {
-                document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="5" class="loading">Ошибка: ${e.message}</td></tr>`;
-            }
-        }
-
-        async function changeRole(userId, role) {
-            if (!confirm(`Сделать пользователя ${role === 'moderator' ? 'модератором' : 'пользователем'}?`)) return;
-            try {
-                const res = await fetch(`${API_URL}/admin/users/${userId}/role`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ role })
-                });
-                if (!res.ok) throw new Error('Ошибка');
-                showMessage('✅ Роль изменена', 'success');
-                loadUsers();
-            } catch(e) { showMessage('❌ Ошибка', 'error'); }
-        }
-
-        async function deleteUser(userId) {
-            if (!confirm('Удалить пользователя? Все его рецензии будут удалены.')) return;
-            try {
-                const res = await fetch(`${API_URL}/admin/users/${userId}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (!res.ok) throw new Error('Ошибка');
-                showMessage('✅ Пользователь удалён', 'success');
-                loadUsers();
-            } catch(e) { showMessage('❌ Ошибка', 'error'); }
-        }
-
-        function showMessage(msg, type) {
-            const msgDiv = document.getElementById('adminMessage');
-            msgDiv.innerHTML = `<div class="${type === 'success' ? 'success-message' : 'error-message'}">${msg}</div>`;
-            setTimeout(() => msgDiv.innerHTML = '', 3000);
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Модалки
-        function openModal(type) {
-            document.getElementById(type === 'login' ? 'loginModal' : 'signupModal').style.display = 'flex';
-        }
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.onclick = () => {
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('signupModal').style.display = 'none';
-            };
-        });
+        // Модалки входа
+        function openModal(t) { document.getElementById(t === 'login' ? 'loginModal' : 'signupModal').style.display = 'flex'; }
+        document.querySelectorAll('.modal-close').forEach(b => { b.onclick = () => { document.getElementById('loginModal').style.display = 'none'; document.getElementById('signupModal').style.display = 'none'; }; });
         window.onclick = (e) => { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; };
-        
         document.getElementById('loginBtn')?.addEventListener('click', () => openModal('login'));
-        document.getElementById('switchToSignup')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('loginModal').style.display = 'none';
-            openModal('signup');
-        });
-        document.getElementById('switchToLogin')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('signupModal').style.display = 'none';
-            openModal('login');
-        });
-        
-        document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            try {
-                const res = await fetch(`${API_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                token = data.token;
-                currentUser = data.user;
-                localStorage.setItem('fostberg_token', token);
-                localStorage.setItem('fostberg_user', JSON.stringify(currentUser));
-                document.getElementById('loginModal').style.display = 'none';
-                updateUI();
-                checkAdminAndLoad();
-            } catch(err) { alert('Ошибка: ' + err.message); }
-        });
-        
-        document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('signupUsername').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            try {
-                const res = await fetch(`${API_URL}/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                token = data.token;
-                currentUser = data.user;
-                localStorage.setItem('fostberg_token', token);
-                localStorage.setItem('fostberg_user', JSON.stringify(currentUser));
-                document.getElementById('signupModal').style.display = 'none';
-                updateUI();
-                checkAdminAndLoad();
-            } catch(err) { alert('Ошибка: ' + err.message); }
-        });
+        document.getElementById('switchToSignup')?.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('loginModal').style.display = 'none'; openModal('signup'); });
+        document.getElementById('switchToLogin')?.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('signupModal').style.display = 'none'; openModal('login'); });
+        document.getElementById('loginForm')?.addEventListener('submit', async (e) => { e.preventDefault(); try { const res = await fetch(`${API_URL}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: document.getElementById('loginEmail').value, password: document.getElementById('loginPassword').value }) }); const data = await res.json(); if (!res.ok) throw new Error(data.error); token = data.token; currentUser = data.user; localStorage.setItem('fostberg_token', token); localStorage.setItem('fostberg_user', JSON.stringify(currentUser)); document.getElementById('loginModal').style.display = 'none'; updateUI(); checkAdminAndLoad(); } catch(err) { alert('Ошибка: ' + err.message); } });
+        document.getElementById('signupForm')?.addEventListener('submit', async (e) => { e.preventDefault(); try { const res = await fetch(`${API_URL}/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: document.getElementById('signupUsername').value, email: document.getElementById('signupEmail').value, password: document.getElementById('signupPassword').value }) }); const data = await res.json(); if (!res.ok) throw new Error(data.error); token = data.token; currentUser = data.user; localStorage.setItem('fostberg_token', token); localStorage.setItem('fostberg_user', JSON.stringify(currentUser)); document.getElementById('signupModal').style.display = 'none'; updateUI(); checkAdminAndLoad(); } catch(err) { alert('Ошибка: ' + err.message); } });
 
-        // Запуск
-        (async function() {
-            const savedUser = localStorage.getItem('fostberg_user');
-            if (savedUser) {
-                try { currentUser = JSON.parse(savedUser); updateUI(); } catch(e) {}
-            }
-            if (token) await loadCurrentUser();
-            updateUI();
-            await checkAdminAndLoad();
-        })();
+        (async () => { const saved = localStorage.getItem('fostberg_user'); if (saved) { try { currentUser = JSON.parse(saved); updateUI(); } catch(e) {} } if (token) await loadCurrentUser(); updateUI(); await checkAdminAndLoad(); })();
     </script>
 </body>
 </html>

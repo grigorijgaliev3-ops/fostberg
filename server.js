@@ -10,11 +10,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const JWT_SECRET = process.env.JWT_SECRET || 'fostberg_secret_key_2025';
-
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// ========== MIDDLEWARE ==========
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -26,7 +28,6 @@ function authenticateToken(req, res, next) {
     });
 }
 
-// ========== MIDDLEWARE ДЛЯ РОЛЕЙ (НОВОЕ) ==========
 function isAdmin(req, res, next) {
     if (req.user && req.user.role === 'admin') {
         next();
@@ -71,6 +72,13 @@ app.post('/api/login', (req, res) => {
         if (!validPassword) return res.status(400).json({ error: 'Неверный email или пароль' });
         const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, JWT_SECRET);
         res.json({ token, user: { id: user.id, username: user.username, email: user.email, avatar: user.avatar, avatarPhoto: user.avatar_photo, role: user.role } });
+    });
+});
+
+app.get('/api/me', authenticateToken, (req, res) => {
+    db.get(`SELECT id, username, email, avatar, avatar_photo, role FROM users WHERE id = ?`, [req.user.id], (err, user) => {
+        if (err || !user) return res.status(404).json({ error: 'Пользователь не найден' });
+        res.json(user);
     });
 });
 
@@ -379,77 +387,6 @@ app.put('/api/users/:userId/avatar', authenticateToken, (req, res) => {
         });
 });
 
-// ========== УПРАВЛЕНИЕ РОЛЯМИ (ТОЛЬКО ДЛЯ АДМИНА) ==========
-// Получить всех пользователей
-app.get('/api/admin/users', authenticateToken, isAdmin, (req, res) => {
-    db.all(`SELECT id, username, email, role, created_at FROM users`, [], (err, users) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(users);
-    });
-});
-
-// Изменить роль пользователя
-app.put('/api/admin/users/:userId/role', authenticateToken, isAdmin, (req, res) => {
-    const { role } = req.body;
-    const userId = req.params.userId;
-    
-    if (!['user', 'moderator', 'admin'].includes(role)) {
-        return res.status(400).json({ error: 'Неверная роль' });
-    }
-    
-    db.run(`UPDATE users SET role = ? WHERE id = ?`, [role, userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true, role });
-    });
-});
-
-// Удалить пользователя
-app.delete('/api/admin/users/:userId', authenticateToken, isAdmin, (req, res) => {
-    const userId = req.params.userId;
-    
-    if (userId == req.user.id) {
-        return res.status(400).json({ error: 'Нельзя удалить самого себя' });
-    }
-    
-    db.run(`DELETE FROM users WHERE id = ?`, [userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true });
-    });
-});
-
-// ========== МОДЕРАЦИЯ РЕЦЕНЗИЙ ==========
-// Удалить рецензию (для модератора и админа)
-app.delete('/api/admin/reviews/:reviewId', authenticateToken, isModerator, (req, res) => {
-    const reviewId = req.params.reviewId;
-    
-    db.run(`DELETE FROM reviews WHERE id = ?`, [reviewId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true });
-    });
-});
-
-// Редактировать трек (для модератора и админа)
-app.put('/api/admin/tracks/:trackId', authenticateToken, isModerator, (req, res) => {
-    const trackId = req.params.trackId;
-    const { title, artist, artwork_url } = req.body;
-    
-    db.run(`UPDATE tracks SET title = ?, artist = ?, artwork_url = ? WHERE id = ?`,
-        [title, artist, artwork_url, trackId],
-        function(err) {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ success: true });
-        });
-});
-
-// Создать админа, если нет пользователей
-db.get(`SELECT COUNT(*) as count FROM users`, [], async (err, row) => {
-    if (row && row.count === 0) {
-        const adminHash = await bcrypt.hash('admin123', 10);
-        db.run(`INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`,
-            ['admin', 'admin@fostberg.com', adminHash, 'admin']);
-        console.log('✅ Админ создан: admin@fostberg.com / admin123');
-    }
-});
 // ========== ТОП ПОЛЬЗОВАТЕЛЕЙ ПО КОЛИЧЕСТВУ РЕЦЕНЗИЙ ==========
 app.get('/api/top-users', (req, res) => {
     db.all(`SELECT u.id, u.username, u.avatar, u.avatar_photo, u.role,
@@ -486,25 +423,21 @@ app.get('/api/random-track', (req, res) => {
         });
 });
 
-// ========== ВСЕ ОЦЕНЁННЫЕ ТРЕКИ (С ПАГИНАЦИЕЙ) ==========
+// ========== ВСЕ ОЦЕНЁННЫЕ ТРЕКИ ==========
 app.get('/api/all-tracks', (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = 20;
     const offset = (page - 1) * limit;
-    
-    console.log('📊 Все оценённые треки, страница:', page);
     
     db.get(`SELECT COUNT(DISTINCT t.id) as total
             FROM tracks t
             INNER JOIN reviews r ON t.id = r.track_id`, 
         (err, countResult) => {
             if (err) {
-                console.error('❌ Ошибка подсчёта:', err);
                 return res.json({ tracks: [], total: 0 });
             }
             
             const total = countResult ? countResult.total : 0;
-            console.log('📊 Всего треков с рецензиями:', total);
             
             db.all(`SELECT DISTINCT t.id, t.title, t.artist, t.artwork_url,
                            COUNT(r.id) as reviews_count,
@@ -517,17 +450,179 @@ app.get('/api/all-tracks', (req, res) => {
                 [limit, offset],
                 (err, tracks) => {
                     if (err) {
-                        console.error('❌ Ошибка получения треков:', err);
                         return res.json({ tracks: [], total: 0 });
                     }
-                    console.log('📊 Отправлено треков:', tracks.length);
                     res.json({ tracks: tracks || [], total: total });
                 });
         });
 });
-app.get('/api/test123', (req, res) => {
-    res.json({ message: 'Test works!' });
+
+// ========== АДМИН-ПАНЕЛЬ ==========
+app.get('/api/admin/users', authenticateToken, isAdmin, (req, res) => {
+    db.all(`SELECT id, username, email, role, created_at FROM users ORDER BY id`, [], (err, users) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(users || []);
+    });
 });
+
+app.put('/api/admin/users/:userId/role', authenticateToken, isAdmin, (req, res) => {
+    const { role } = req.body;
+    const userId = req.params.userId;
+    
+    if (!['user', 'moderator', 'admin'].includes(role)) {
+        return res.status(400).json({ error: 'Неверная роль' });
+    }
+    
+    db.run(`UPDATE users SET role = ? WHERE id = ?`, [role, userId], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
+app.delete('/api/admin/users/:userId', authenticateToken, isAdmin, (req, res) => {
+    const userId = req.params.userId;
+    
+    if (userId == req.user.id) {
+        return res.status(400).json({ error: 'Нельзя удалить самого себя' });
+    }
+    
+    db.run(`DELETE FROM users WHERE id = ?`, [userId], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
+app.get('/api/admin/tracks', authenticateToken, isAdmin, (req, res) => {
+    db.all(`SELECT DISTINCT t.id, t.sc_id, t.title, t.artist, t.artwork_url, t.created_at,
+                   COUNT(r.id) as reviews_count
+            FROM tracks t
+            INNER JOIN reviews r ON t.id = r.track_id
+            GROUP BY t.id
+            ORDER BY t.id DESC`, 
+        [], (err, tracks) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(tracks || []);
+        });
+});
+
+app.put('/api/admin/tracks/:trackId', authenticateToken, isModerator, (req, res) => {
+    const trackId = req.params.trackId;
+    const { title, artist } = req.body;
+    
+    if (!title && !artist) {
+        return res.status(400).json({ error: 'Укажите хотя бы одно поле' });
+    }
+    
+    let sql = 'UPDATE tracks SET ';
+    const params = [];
+    if (title) { sql += 'title = ?'; params.push(title); }
+    if (artist) { 
+        if (params.length > 0) sql += ', ';
+        sql += 'artist = ?'; 
+        params.push(artist); 
+    }
+    sql += ' WHERE id = ?';
+    params.push(trackId);
+    
+    db.run(sql, params, function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
+app.delete('/api/admin/tracks/:trackId', authenticateToken, isAdmin, (req, res) => {
+    const trackId = req.params.trackId;
+    
+    db.run(`DELETE FROM tracks WHERE id = ?`, [trackId], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
+app.delete('/api/admin/reviews/:reviewId', authenticateToken, isModerator, (req, res) => {
+    const reviewId = req.params.reviewId;
+    
+    db.run(`DELETE FROM reviews WHERE id = ?`, [reviewId], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
+// ========== ПРЕДЛОЖЕНИЯ ИЗМЕНЕНИЙ ==========
+app.post('/api/tracks/:trackId/suggest', authenticateToken, (req, res) => {
+    const trackId = req.params.trackId;
+    const { suggestedTitle, suggestedArtist } = req.body;
+    
+    if (!suggestedTitle && !suggestedArtist) {
+        return res.status(400).json({ error: 'Укажите хотя бы одно изменение' });
+    }
+    
+    db.run(`INSERT INTO track_suggestions (track_id, user_id, suggested_title, suggested_artist, status) VALUES (?, ?, ?, ?, 'pending')`,
+        [trackId, req.user.id, suggestedTitle || null, suggestedArtist || null],
+        function(err) {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ success: true });
+        });
+});
+
+app.get('/api/admin/suggestions', authenticateToken, isAdmin, (req, res) => {
+    db.all(`SELECT s.*, u.username, t.title as current_title, t.artist as current_artist
+            FROM track_suggestions s
+            JOIN users u ON s.user_id = u.id
+            JOIN tracks t ON s.track_id = t.id
+            WHERE s.status = 'pending'
+            ORDER BY s.created_at DESC`, 
+        [], (err, suggestions) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(suggestions || []);
+        });
+});
+
+app.post('/api/admin/suggestions/:id/approve', authenticateToken, isAdmin, (req, res) => {
+    const suggestionId = req.params.id;
+    
+    db.get(`SELECT * FROM track_suggestions WHERE id = ?`, [suggestionId], (err, suggestion) => {
+        if (err || !suggestion) return res.status(404).json({ error: 'Предложение не найдено' });
+        
+        let sql = 'UPDATE tracks SET ';
+        const params = [];
+        if (suggestion.suggested_title) {
+            sql += 'title = ?';
+            params.push(suggestion.suggested_title);
+        }
+        if (suggestion.suggested_artist) {
+            if (params.length > 0) sql += ', ';
+            sql += 'artist = ?';
+            params.push(suggestion.suggested_artist);
+        }
+        sql += ' WHERE id = ?';
+        params.push(suggestion.track_id);
+        
+        db.run(sql, params, (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            db.run(`UPDATE track_suggestions SET status = 'approved' WHERE id = ?`, [suggestionId]);
+            res.json({ success: true });
+        });
+    });
+});
+
+app.post('/api/admin/suggestions/:id/reject', authenticateToken, isAdmin, (req, res) => {
+    db.run(`UPDATE track_suggestions SET status = 'rejected' WHERE id = ?`, [req.params.id], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
+// Создать админа, если нет пользователей
+db.get(`SELECT COUNT(*) as count FROM users`, [], async (err, row) => {
+    if (row && row.count === 0) {
+        const adminHash = await bcrypt.hash('admin123', 10);
+        db.run(`INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`,
+            ['admin', 'admin@fostberg.com', adminHash, 'admin']);
+        console.log('✅ Админ создан: admin@fostberg.com / admin123');
+    }
+});
+
 // ========== ЗАПУСК СЕРВЕРА ==========
 app.listen(PORT, () => {
     console.log(`🚀 Сервер на http://localhost:${PORT}`);

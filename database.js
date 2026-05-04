@@ -41,6 +41,18 @@ db.serialize(() => {
         FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE
     )`);
 
+    db.run(`CREATE TABLE IF NOT EXISTS track_suggestions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    track_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    suggested_title TEXT,
+    suggested_artist TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`);
+
     db.run(`CREATE TABLE IF NOT EXISTS user_likes (
         user_id INTEGER NOT NULL,
         review_id INTEGER NOT NULL,
@@ -48,7 +60,22 @@ db.serialize(() => {
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE
     )`);
-
+    
+    // Создание таблицы предложений (если нет)
+db.run(`CREATE TABLE IF NOT EXISTS track_suggestions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    track_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    suggested_title TEXT,
+    suggested_artist TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+)`, (err) => {
+    if (err) console.error('❌ Ошибка создания track_suggestions:', err);
+    else console.log('✅ Таблица track_suggestions создана');
+});
     console.log('✅ База данных готова');
 });
 

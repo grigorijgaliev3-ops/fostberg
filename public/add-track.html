@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Добавить трек — Fostberg</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -18,10 +18,10 @@
         .add-track-header h1 {
             font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(135deg, #e0e0e0, #888);
+            background: linear-gradient(135deg, #e0e0e0, #c41e3a);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
+            color: transparent;
             margin-bottom: 8px;
         }
         .add-track-header p {
@@ -32,7 +32,7 @@
             background: #0f0f0f;
             border-radius: 20px;
             padding: 28px;
-            border: 1px solid #2a2a2a;
+            border: 1px solid #2a1a1a;
         }
         .form-group {
             margin-bottom: 20px;
@@ -48,15 +48,14 @@
             width: 100%;
             padding: 12px 16px;
             background: #121212;
-            border: 1px solid #2a2a2a;
+            border: 1px solid #2a1a1a;
             border-radius: 12px;
             color: #e0e0e0;
             font-size: 14px;
-            transition: all 0.2s;
         }
         .form-group input:focus {
             outline: none;
-            border-color: #4a4a4a;
+            border-color: #c41e3a;
             background: #181818;
         }
         .form-group small {
@@ -71,7 +70,7 @@
             margin-top: 28px;
         }
         .submit-btn {
-            background: #4CAF50;
+            background: #c41e3a;
             border: none;
             color: white;
             padding: 12px 28px;
@@ -79,15 +78,14 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
-            transition: all 0.2s;
         }
         .submit-btn:hover {
-            background: #45a049;
+            background: #8b0000;
             transform: translateY(-2px);
         }
         .cancel-btn {
-            background: #1a1a1a;
-            border: 1px solid #3a3a3a;
+            background: #1a0a0a;
+            border: 1px solid #c41e3a;
             color: #e0e0e0;
             padding: 12px 28px;
             border-radius: 30px;
@@ -95,31 +93,10 @@
             text-align: center;
             font-weight: 500;
             font-size: 14px;
-            transition: all 0.2s;
         }
         .cancel-btn:hover {
-            background: #252525;
-            border-color: #4a4a4a;
-        }
-        .add-track-help {
-            margin-top: 32px;
-            padding: 20px;
-            background: #0f0f0f;
-            border-radius: 16px;
-            border: 1px solid #2a2a2a;
-        }
-        .add-track-help h3 {
-            margin-bottom: 12px;
-            color: #e0e0e0;
-            font-size: 16px;
-        }
-        .add-track-help ul {
-            padding-left: 20px;
-            color: #888;
-            font-size: 13px;
-        }
-        .add-track-help li {
-            margin-bottom: 6px;
+            background: #c41e3a;
+            color: #fff;
         }
         .message {
             padding: 12px 16px;
@@ -135,11 +112,70 @@
         .message.success {
             background: #1a4a1a;
             color: #88ff88;
-            border: 1px solid #4CAF50;
+            border: 1px solid #c41e3a;
         }
         .required-star {
-            color: #ff4444;
+            color: #c41e3a;
             margin-left: 4px;
+        }
+        .add-track-help {
+            margin-top: 32px;
+            padding: 20px;
+            background: #0f0f0f;
+            border-radius: 16px;
+            border: 1px solid #2a1a1a;
+        }
+        .add-track-help ul {
+            padding-left: 20px;
+            color: #888;
+            font-size: 13px;
+        }
+        .add-track-help li {
+            margin-bottom: 6px;
+        }
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+            .header-left {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -280px;
+                width: 280px;
+                height: 100vh;
+                background: #0f0f0f;
+                flex-direction: column;
+                padding: 80px 20px 20px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                z-index: 1000;
+                border-left: 2px solid #c41e3a;
+                margin: 0;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+            }
+            .nav.open {
+                right: 0;
+            }
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+                padding: 12px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -151,13 +187,14 @@
                     <span class="logo-icon">🎧</span>
                     <span class="logo-text">Fostberg</span>
                 </a>
-<nav class="nav">
-    <a href="index.html" class="nav-btn">Популярные</a>
-    <a href="top.html" class="nav-btn">Топ пользователей</a>
-    <a href="tracks.html" class="nav-btn">Все треки</a>
-    <a href="write-review.html" class="nav-btn write-btn">✍️ Написать</a>
-    <a href="add-track.html" class="nav-btn active">➕ Добавить трек</a>
-</nav>
+                <button class="mobile-toggle" id="mobileToggle">☰</button>
+                <nav class="nav" id="mainNav">
+                    <a href="index.html" class="nav-btn">Популярные</a>
+                    <a href="top.html" class="nav-btn">Топ пользователей</a>
+                    <a href="tracks.html" class="nav-btn">Все треки</a>
+                    <a href="write-review.html" class="nav-btn write-btn">✍️ Написать</a>
+                    <a href="add-track.html" class="nav-btn active">➕ Добавить трек</a>
+                </nav>
             </div>
             <div class="header-right">
                 <div class="search-wrapper">
@@ -184,31 +221,27 @@
                     <p>Не нашли нужный трек в поиске? Добавьте его вручную!</p>
                 </div>
 
-                <div id="message" class="message"></div>
+                <div id="message"></div>
 
                 <form id="addTrackForm" class="add-track-form">
                     <div class="form-group">
                         <label for="trackTitle">Название трека <span class="required-star">*</span></label>
-                        <input type="text" id="trackTitle" name="title" required placeholder="Например: Bohemian Rhapsody">
+                        <input type="text" id="trackTitle" required placeholder="Например: Bohemian Rhapsody">
                     </div>
-
                     <div class="form-group">
                         <label for="trackArtist">Исполнитель <span class="required-star">*</span></label>
-                        <input type="text" id="trackArtist" name="artist" required placeholder="Например: Queen">
+                        <input type="text" id="trackArtist" required placeholder="Например: Queen">
                     </div>
-
                     <div class="form-group">
                         <label for="trackUrl">Ссылка на YouTube</label>
-                        <input type="url" id="trackUrl" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=... или https://youtu.be/...">
-                        <small>Если указана ссылка, мы извлечем ID видео для плеера</small>
+                        <input type="url" id="trackUrl" placeholder="https://www.youtube.com/watch?v=...">
+                        <small>Необязательно. Если указать, добавится плеер</small>
                     </div>
-
                     <div class="form-group">
                         <label for="trackImage">URL обложки</label>
-                        <input type="url" id="trackImage" name="artworkUrl" placeholder="https://...">
-                        <small>Оставьте пустым, если нет обложки</small>
+                        <input type="url" id="trackImage" placeholder="https://...">
+                        <small>Необязательно</small>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">✅ Добавить трек</button>
                         <a href="index.html" class="cancel-btn">❌ Отмена</a>
@@ -220,15 +253,15 @@
                     <ul>
                         <li>Откройте видео на YouTube</li>
                         <li>Скопируйте URL из адресной строки</li>
-                        <li>Вставьте в поле "Ссылка на YouTube"</li>
+                        <li>Вставьте в поле выше</li>
                     </ul>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Модалки авторизации -->
-    <div class="modal" id="loginModal">
+    <!-- Модалки -->
+    <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <h2>Вход</h2>
@@ -237,187 +270,89 @@
                 <input type="password" id="loginPassword" placeholder="Пароль" required>
                 <button type="submit">Войти</button>
             </form>
-            <p>Нет аккаунта? <a href="#" id="switchToSignup">Зарегистрироваться</a></p>
         </div>
     </div>
-
-    <div class="modal" id="signupModal">
+    <div id="signupModal" class="modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <h2>Регистрация</h2>
             <form id="signupForm">
-                <input type="text" id="signupUsername" placeholder="Имя пользователя" required>
+                <input type="text" id="signupUsername" placeholder="Имя" required>
                 <input type="email" id="signupEmail" placeholder="Email" required>
                 <input type="password" id="signupPassword" placeholder="Пароль" required>
                 <button type="submit">Зарегистрироваться</button>
             </form>
-            <p>Уже есть аккаунт? <a href="#" id="switchToLogin">Войти</a></p>
         </div>
     </div>
 
+    <script src="js/app.js"></script>
     <script>
-        const API_URL = 'http://localhost:3000/api';
-        let token = localStorage.getItem('fostberg_token');
-        let currentUser = null;
-
-        const savedUser = localStorage.getItem('fostberg_user');
-        if (savedUser) {
-            try {
-                currentUser = JSON.parse(savedUser);
-            } catch(e) {}
-        }
-
+        // Функция показа сообщения
         function showMessage(text, isError = true) {
             const msgDiv = document.getElementById('message');
-            msgDiv.textContent = text;
-            msgDiv.className = 'message ' + (isError ? 'error' : 'success');
-            msgDiv.style.display = 'block';
+            msgDiv.innerHTML = `<div style="padding:12px;border-radius:12px;margin-bottom:20px;background:${isError ? '#4a1a1a' : '#1a4a1a'};color:${isError ? '#ff8888' : '#88ff88'};border:1px solid ${isError ? '#8b1a1a' : '#c41e3a'}">${text}</div>`;
             setTimeout(() => {
-                msgDiv.style.display = 'none';
+                msgDiv.innerHTML = '';
             }, 3000);
         }
 
-        function updateUI() {
-            const authDiv = document.getElementById('authButtons');
-            const userDiv = document.getElementById('userMenu');
-            const profileName = document.getElementById('profileName');
-            if (currentUser) {
-                authDiv.style.display = 'none';
-                userDiv.style.display = 'flex';
-                if (profileName) profileName.textContent = currentUser.username;
-            } else {
-                authDiv.style.display = 'flex';
-                userDiv.style.display = 'none';
-            }
-        }
-
-        // Модалки
-        function openModal(type) {
-            const modal = document.getElementById(type === 'login' ? 'loginModal' : 'signupModal');
-            if (modal) modal.style.display = 'flex';
-        }
-
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.onclick = () => {
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('signupModal').style.display = 'none';
-            };
-        });
-
-        window.onclick = (e) => {
-            if (e.target.classList.contains('modal')) e.target.style.display = 'none';
-        };
-
-        document.getElementById('loginBtn')?.addEventListener('click', () => openModal('login'));
-        document.getElementById('switchToSignup')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('loginModal').style.display = 'none';
-            openModal('signup');
-        });
-        document.getElementById('switchToLogin')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('signupModal').style.display = 'none';
-            openModal('login');
-        });
-
-        document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            try {
-                const res = await fetch(`${API_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                token = data.token;
-                currentUser = data.user;
-                localStorage.setItem('fostberg_token', token);
-                localStorage.setItem('fostberg_user', JSON.stringify(currentUser));
-                document.getElementById('loginModal').style.display = 'none';
-                updateUI();
-                location.reload();
-            } catch(err) {
-                showMessage('Ошибка входа: ' + err.message);
-            }
-        });
-
-        document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('signupUsername').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            try {
-                const res = await fetch(`${API_URL}/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                token = data.token;
-                currentUser = data.user;
-                localStorage.setItem('fostberg_token', token);
-                localStorage.setItem('fostberg_user', JSON.stringify(currentUser));
-                document.getElementById('signupModal').style.display = 'none';
-                updateUI();
-                location.reload();
-            } catch(err) {
-                showMessage('Ошибка регистрации: ' + err.message);
-            }
-        });
-
-        document.getElementById('logoutBtn')?.addEventListener('click', () => {
-            localStorage.removeItem('fostberg_token');
-            localStorage.removeItem('fostberg_user');
-            window.location.href = 'index.html';
-        });
-
         // Добавление трека
-        document.getElementById('addTrackForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (!currentUser) {
-                showMessage('Сначала авторизуйтесь!');
-                openModal('login');
-                return;
-            }
-
-            const title = document.getElementById('trackTitle').value.trim();
-            const artist = document.getElementById('trackArtist').value.trim();
-            const youtubeUrl = document.getElementById('trackUrl').value.trim();
-            const artworkUrl = document.getElementById('trackImage').value.trim();
-
-            if (!title || !artist) {
-                showMessage('Название и исполнитель обязательны!');
-                return;
-            }
-
-            try {
-                const res = await fetch(`${API_URL}/tracks/add`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ title, artist, youtubeUrl, artworkUrl })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
+        const addForm = document.getElementById('addTrackForm');
+        if (addForm) {
+            addForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
                 
-                showMessage('✅ Трек успешно добавлен!', false);
-                setTimeout(() => {
-                    const trackId = data.track.sc_id || data.track.id;
-                    window.location.href = `track.html?id=${trackId}`;
-                }, 1000);
-            } catch(err) {
-                showMessage('Ошибка: ' + err.message);
-            }
-        });
-
-        updateUI();
+                const token = localStorage.getItem('fostberg_token');
+                const currentUser = localStorage.getItem('fostberg_user');
+                
+                if (!token || !currentUser) {
+                    showMessage('Сначала авторизуйтесь!');
+                    document.getElementById('loginBtn').click();
+                    return;
+                }
+                
+                const title = document.getElementById('trackTitle').value.trim();
+                const artist = document.getElementById('trackArtist').value.trim();
+                const youtubeUrl = document.getElementById('trackUrl').value.trim();
+                const artworkUrl = document.getElementById('trackImage').value.trim();
+                
+                if (!title || !artist) {
+                    showMessage('Название и исполнитель обязательны!');
+                    return;
+                }
+                
+                try {
+                    const res = await fetch(`${API_URL}/tracks/add`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ title, artist, youtubeUrl, artworkUrl })
+                    });
+                    
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error);
+                    
+                    showMessage('✅ Трек добавлен!', false);
+                    setTimeout(() => {
+                        window.location.href = `track.html?id=${data.track.sc_id || data.track.id}`;
+                    }, 1000);
+                } catch (err) {
+                    showMessage('❌ Ошибка: ' + err.message);
+                }
+            });
+        }
+        
+        // Мобильное меню
+        const toggle = document.getElementById('mobileToggle');
+        const nav = document.getElementById('mainNav');
+        if (toggle && nav) {
+            toggle.onclick = () => nav.classList.toggle('open');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.onclick = () => nav.classList.remove('open');
+            });
+        }
     </script>
 </body>
 </html>

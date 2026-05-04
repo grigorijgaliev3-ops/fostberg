@@ -549,7 +549,13 @@ async function loadTrackPage(trackId) {
                             <div id="youtubePlayer"></div>
                         </div>
                         ${currentUser ? `
-                            <button class="write-review-track-btn" id="writeReviewBtn" style="margin-top: 20px;">✍️ Написать рецензию</button>
+                            <div class="button-group">
+                                <button class="write-review-track-btn" id="writeReviewBtn">✍️ Написать рецензию</button>
+                                <button class="suggest-change-btn" id="suggestChangeBtn">✏️ Предложить изменение</button>
+                                ${(currentUser.role === 'admin' || currentUser.role === 'moderator') ? `
+                                    <button class="edit-track-btn" id="editTrackBtn">⚙️ Редактировать трек</button>
+                                ` : ''}
+                            </div>
                         ` : `
                             <button class="write-review-track-btn" id="loginToReviewBtn" style="margin-top: 20px;">🔒 Войдите, чтобы написать рецензию</button>
                         `}
@@ -580,7 +586,7 @@ async function loadTrackPage(trackId) {
             `;
         }
         
-        // Рецензии с опознавательными знаками
+        // Рецензии
         const reviewsList = document.getElementById('reviewsList');
         if (reviewsList && reviews.length > 0) {
             reviewsList.innerHTML = reviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(review => {
@@ -590,13 +596,11 @@ async function loadTrackPage(trackId) {
                     ? `<img src="${review.avatar_photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">` 
                     : (review.avatar || '👤');
                 
-                // Цвет итогового балла
                 let totalColor = '#ff4444';
                 if (total >= 40) totalColor = '#4CAF50';
                 else if (total >= 30) totalColor = '#FFC107';
                 else if (total >= 20) totalColor = '#FF9800';
                 
-                // Определяем роль автора
                 let roleBadge = '';
                 let authorNameClass = '';
                 let reviewItemClass = 'review-item';
@@ -611,7 +615,6 @@ async function loadTrackPage(trackId) {
                     reviewItemClass = 'review-item moderator-review';
                 }
                 
-                // Кнопка удаления только для модераторов и админов
                 const deleteButton = (currentUser && (currentUser.role === 'admin' || currentUser.role === 'moderator')) 
                     ? `<button class="delete-review-btn" data-id="${review.id}" style="background: #8b1a1a; color: white; border: none; padding: 4px 12px; border-radius: 20px; cursor: pointer; margin-left: 10px;">🗑 Удалить</button>`
                     : '';
@@ -633,7 +636,6 @@ async function loadTrackPage(trackId) {
                             ${deleteButton}
                         </div>
                         
-                        <!-- Критерии в виде ползунков -->
                         <div class="criteria-container" style="margin: 16px 0; background: #0a0a0a; border-radius: 12px; padding: 12px;">
                             <div class="criteria-item" style="margin-bottom: 12px;">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
@@ -693,7 +695,9 @@ async function loadTrackPage(trackId) {
             }).join('');
         }
         
-        // Обработчики
+        // ========== ОБРАБОТЧИКИ ==========
+        
+        // Написать рецензию
         const writeBtn = document.getElementById('writeReviewBtn');
         if (writeBtn) {
             writeBtn.onclick = () => {
@@ -706,6 +710,115 @@ async function loadTrackPage(trackId) {
             loginToReviewBtn.onclick = () => openModal('login');
         }
         
+        // Предложить изменение (модалка)
+        const suggestBtn = document.getElementById('suggestChangeBtn');
+        if (suggestBtn) {
+            suggestBtn.onclick = () => {
+                const oldModal = document.getElementById('suggestModal');
+                if (oldModal) oldModal.remove();
+                
+                const modal = document.createElement('div');
+                modal.id = 'suggestModal';
+                modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10001;display:flex;justify-content:center;align-items:center';
+                
+                modal.innerHTML = `
+                    <div style="background:#1a1a1a;border-radius:20px;padding:28px;width:90%;max-width:420px;border:1px solid #c41e3a;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                            <h3 style="margin:0;font-size:20px;">✏️ Предложить изменение</h3>
+                            <button id="closeModalBtn" style="background:none;border:none;color:#888;font-size:28px;cursor:pointer;">&times;</button>
+                        </div>
+                        <p style="color:#888;margin-bottom:20px;">Заполните поля, которые хотите изменить</p>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;">Название трека</label>
+                            <input type="text" id="suggestTitle" placeholder="${escapeHtml(track.title)}" style="width:100%;padding:12px;background:#0a0a0a;border:1px solid #333;border-radius:10px;color:#e0e0e0;">
+                        </div>
+                        <div style="margin-bottom:24px;">
+                            <label style="display:block;margin-bottom:6px;font-size:13px;">Исполнитель</label>
+                            <input type="text" id="suggestArtist" placeholder="${escapeHtml(track.artist)}" style="width:100%;padding:12px;background:#0a0a0a;border:1px solid #333;border-radius:10px;color:#e0e0e0;">
+                        </div>
+                        <div style="display:flex;gap:12px;">
+                            <button id="sendSuggestBtn" style="flex:1;padding:12px;background:#c41e3a;border:none;border-radius:30px;color:#fff;cursor:pointer;font-weight:500;">📤 Отправить</button>
+                            <button id="cancelModalBtn" style="flex:1;padding:12px;background:#333;border:none;border-radius:30px;color:#fff;cursor:pointer;">Отмена</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                document.getElementById('closeModalBtn').onclick = () => modal.remove();
+                document.getElementById('cancelModalBtn').onclick = () => modal.remove();
+                modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+                
+                document.getElementById('sendSuggestBtn').onclick = async () => {
+                    const suggestedTitle = document.getElementById('suggestTitle').value.trim();
+                    const suggestedArtist = document.getElementById('suggestArtist').value.trim();
+                    
+                    if (!suggestedTitle && !suggestedArtist) {
+                        alert('Заполните хотя бы одно поле');
+                        return;
+                    }
+                    
+                    try {
+                        await apiRequest(`/tracks/${track.id}/suggest`, {
+                            method: 'POST',
+                            body: JSON.stringify({ 
+                                suggestedTitle: suggestedTitle || null, 
+                                suggestedArtist: suggestedArtist || null 
+                            })
+                        });
+                        alert('✅ Спасибо! Предложение отправлено на модерацию.');
+                        modal.remove();
+                    } catch (err) {
+                        alert('❌ Ошибка: ' + err.message);
+                    }
+                };
+            };
+        }
+        
+        // ========== РЕДАКТИРОВАНИЕ ТРЕКА (ДЛЯ МОДЕРАТОРА/АДМИНА) ==========
+        const editTrackBtn = document.getElementById('editTrackBtn');
+        if (editTrackBtn) {
+            editTrackBtn.onclick = async () => {
+                const newTitle = prompt("Введите новое название трека:", track.title);
+                let updated = false;
+                
+                if (newTitle !== null && newTitle !== track.title) {
+                    try {
+                        await apiRequest(`/admin/tracks/${track.id}`, {
+                            method: 'PUT',
+                            body: JSON.stringify({ title: newTitle })
+                        });
+                        updated = true;
+                    } catch (err) {
+                        alert('Ошибка при обновлении названия: ' + err.message);
+                    }
+                }
+                
+                const newArtist = prompt("Введите нового исполнителя:", track.artist);
+                if (newArtist !== null && newArtist !== track.artist) {
+                    try {
+                        await apiRequest(`/admin/tracks/${track.id}`, {
+                            method: 'PUT',
+                            body: JSON.stringify({ artist: newArtist })
+                        });
+                        updated = true;
+                    } catch (err) {
+                        alert('Ошибка при обновлении исполнителя: ' + err.message);
+                    }
+                }
+                
+                if (updated) {
+                    alert('✅ Информация о треке обновлена!');
+                    loadTrackPage(trackId);
+                } else if (newTitle === null && newArtist === null) {
+                    // пользователь нажал отмену
+                } else {
+                    alert('Изменения не были внесены');
+                }
+            };
+        }
+        
+        // Клик по имени автора
         document.querySelectorAll('.author-name').forEach(name => {
             name.onclick = (e) => {
                 e.stopPropagation();
@@ -714,6 +827,7 @@ async function loadTrackPage(trackId) {
             };
         });
         
+        // Лайки
         document.querySelectorAll('.like-btn').forEach(btn => {
             btn.onclick = async (e) => {
                 e.stopPropagation();
@@ -1278,9 +1392,9 @@ function init() {
     const path = window.location.pathname;
     const fullHref = window.location.href;
     
-   if (path.includes('top.html') || fullHref.includes('top.html')) {
-    loadTopUsers();
-} else if (path.includes('write-review.html') || fullHref.includes('write-review.html')) {
+    if (path.includes('top.html') || fullHref.includes('top.html')) {
+        loadTopUsers();
+    } else if (path.includes('write-review.html') || fullHref.includes('write-review.html')) {
         initWritePage();
     } else if (path.includes('profile.html') || fullHref.includes('profile.html')) {
         initProfilePage();
@@ -1289,13 +1403,31 @@ function init() {
     } else if (path.includes('user.html') || fullHref.includes('user.html')) {
         initUserPage();
     } else if (path.includes('tracks.html') || fullHref.includes('tracks.html')) {
-    loadAllTracks();
+        loadAllTracks();
     } else if (path.includes('add-track.html') || fullHref.includes('add-track.html')) {
         // add-track.html обрабатывается отдельно, здесь ничего не делаем
         // страница сама себя рендерит
     } else {
         loadTopTracksHome();
     }
+    
+    // ========== МОБИЛЬНОЕ МЕНЮ ==========
+    initMobileMenu();
+}
+
+function initMobileMenu() {
+    const toggle = document.getElementById('mobileToggle');
+    const nav = document.querySelector('.nav');
+    
+    if (!toggle || !nav) return;
+    
+    toggle.onclick = () => {
+        if (nav.style.right === '0px') {
+            nav.style.right = '-100%';
+        } else {
+            nav.style.right = '0px';
+        }
+    };
 }
 
 init();
